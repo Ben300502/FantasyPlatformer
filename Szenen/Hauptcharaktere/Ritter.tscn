@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=3 uid="uid://jfuj3o0pqx7r"]
+[gd_scene load_steps=93 format=3 uid="uid://jfuj3o0pqx7r"]
 
 [ext_resource type="Texture2D" uid="uid://dbqvvwywlu3tm" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Attack/attack1.png" id="1_4tnbh"]
 [ext_resource type="Texture2D" uid="uid://dqj4ytu0bboy8" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Walk_attack/walk+attack1.png" id="1_auava"]
@@ -59,6 +59,20 @@
 [ext_resource type="Texture2D" uid="uid://7xot1b8ulabn" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Jump/jump5.png" id="31_okx7x"]
 [ext_resource type="Texture2D" uid="uid://bvctsxqh5e7pe" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Jump/jump6.png" id="32_m361l"]
 [ext_resource type="Texture2D" uid="uid://b8qwbqugxu6r8" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Jump/jump7.png" id="33_ndmbx"]
+[ext_resource type="Texture2D" uid="uid://byj3q7si3v0vl" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death1.png" id="60_563js"]
+[ext_resource type="Texture2D" uid="uid://cip4hjg4ufybp" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death2.png" id="61_lm3io"]
+[ext_resource type="Texture2D" uid="uid://b1qg6pdv4k1gu" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death3.png" id="62_4iqn8"]
+[ext_resource type="Texture2D" uid="uid://c803g4i80s2lh" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death4.png" id="63_6bo53"]
+[ext_resource type="Texture2D" uid="uid://cmdt72vtm5usn" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death5.png" id="64_4iqij"]
+[ext_resource type="Texture2D" uid="uid://bqqyrqft18o8" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death6.png" id="65_q6s48"]
+[ext_resource type="Texture2D" uid="uid://b3jj0p5kx0ant" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death7.png" id="66_8sdc4"]
+[ext_resource type="Texture2D" uid="uid://d3raon27iua1q" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death8.png" id="67_xbl35"]
+[ext_resource type="Texture2D" uid="uid://dgtuxkybsois0" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death9.png" id="68_vdy2d"]
+[ext_resource type="Texture2D" uid="uid://d0labe8a4o303" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Death/death10.png" id="69_ub2ed"]
+[ext_resource type="Texture2D" uid="uid://d3abcboko5o8m" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Hurt/hurt1.png" id="70_myqge"]
+[ext_resource type="Texture2D" uid="uid://ib350d053gfu" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Hurt/hurt2.png" id="71_j7oyh"]
+[ext_resource type="Texture2D" uid="uid://bf5aataq3xim" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Hurt/hurt3.png" id="72_frb8d"]
+[ext_resource type="Texture2D" uid="uid://dodh8443t73n2" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Hurt/hurt4.png" id="73_jrole"]
 
 [sub_resource type="GDScript" id="GDScript_a2mel"]
 script/source = "extends CharacterBody2D
@@ -88,6 +102,7 @@ func _process(delta):
 	if	spieltAngriffsanimation() and is_on_floor():
 		velocity.x = angriffGeschwindigkeit
 	else:
+		$HitboxSchwert/CollisionShape2D.disabled = true
 		ueberpruefeRichtungsEingabe()
 		springenUndLanden()
 		ueberpruefeAngriff()
@@ -391,6 +406,58 @@ animations = [{
 }],
 "loop": false,
 "name": &"sprung_hoch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("60_563js")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_lm3io")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_4iqn8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_6bo53")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_4iqij")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_q6s48")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_8sdc4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_xbl35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_vdy2d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_ub2ed")
+}],
+"loop": true,
+"name": &"tod",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("70_myqge")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_j7oyh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_frb8d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_jrole")
+}],
+"loop": true,
+"name": &"verletzt",
 "speed": 5.0
 }]
 
@@ -750,7 +817,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_mbtvi"]
 resource_name = "angriff_rennen"
-length = 0.9
+length = 1.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -758,10 +825,10 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.6, 0.75),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3, 4, 5]
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -782,10 +849,66 @@ tracks/2/path = NodePath("HitboxSchwert/CollisionShape2D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
+"times": PackedFloat32Array(0, 0.4, 0.833333, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": []
+"values": [true, false, false, true]
+}
+
+[sub_resource type="Animation" id="Animation_5yfvb"]
+resource_name = "verletzt"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Animation/AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"verletzt"]
+}
+
+[sub_resource type="Animation" id="Animation_gapkf"]
+resource_name = "tod"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.35),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0, 9]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Animation/AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"tod"]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hshl7"]
@@ -801,7 +924,9 @@ _data = {
 "landen": SubResource("Animation_2lhg0"),
 "laufen": SubResource("Animation_2kuuj"),
 "rennen": SubResource("Animation_wkmnx"),
-"sprung_hoch": SubResource("Animation_7od47")
+"sprung_hoch": SubResource("Animation_7od47"),
+"tod": SubResource("Animation_gapkf"),
+"verletzt": SubResource("Animation_5yfvb")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nk01h"]
