@@ -1,0 +1,265 @@
+[gd_scene load_steps=28 format=3 uid="uid://kb5fff4o6ws2"]
+
+[ext_resource type="Texture2D" uid="uid://bhqoo1psj61dm" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight10_attack1.png" id="1_mxg2v"]
+[ext_resource type="Texture2D" uid="uid://dseuqymp0kdcc" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight11_attack2.png" id="2_476p2"]
+[ext_resource type="Texture2D" uid="uid://bytd04oy70tff" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight12_attack3.png" id="3_4p1gy"]
+[ext_resource type="Texture2D" uid="uid://2h7sf25t8d2t" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight13_attack4.png" id="4_bgnij"]
+[ext_resource type="Texture2D" uid="uid://c5fvdgq0y42ij" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight01_idle1.png" id="5_er2hv"]
+[ext_resource type="Texture2D" uid="uid://cjdm5b8rsicjo" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight02_idle2.png" id="6_xf15q"]
+[ext_resource type="Texture2D" uid="uid://blnpsbympj2at" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight03_idle3.png" id="7_y2ft6"]
+[ext_resource type="Texture2D" uid="uid://dvqp4raij8m80" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight04_walk1.png" id="8_tklf3"]
+[ext_resource type="Texture2D" uid="uid://bfqm5mpusnx6f" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight05_walk2.png" id="9_yx3ox"]
+[ext_resource type="Texture2D" uid="uid://dldfh0xn16jyw" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight06_walk3.png" id="10_00plc"]
+[ext_resource type="Texture2D" uid="uid://culjawe3rvm1y" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight07_walk4.png" id="11_hq15g"]
+[ext_resource type="Texture2D" uid="uid://sscolw1bp415" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight08_walk5.png" id="12_okdxo"]
+[ext_resource type="Texture2D" uid="uid://usxp8joigvnr" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight09_walk6.png" id="13_p70i7"]
+[ext_resource type="Texture2D" uid="uid://bmg18cxr0c2nt" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight16_death1.png" id="14_gmemr"]
+[ext_resource type="Texture2D" uid="uid://dsumvv8ffgsjr" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight17_death2.png" id="15_0uuep"]
+[ext_resource type="Texture2D" uid="uid://cut376q7vkpp" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight18_death3.png" id="16_d2qen"]
+[ext_resource type="Texture2D" uid="uid://crcvt71exi5gm" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight19_death4.png" id="17_gvbx0"]
+[ext_resource type="Texture2D" uid="uid://blydnjep8qk2v" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight14_hurt1.png" id="18_ijer7"]
+[ext_resource type="Texture2D" uid="uid://xwj7p87cuep5" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight15_hurt2.png" id="19_y7ppf"]
+
+[sub_resource type="GDScript" id="GDScript_u16bh"]
+script/source = "extends CharacterBody2D
+
+const GESCHWINDIGKEIT = 120
+const SPRUNGKRAFT = 500
+const GRAVITATION = 1000
+
+@onready var animationsSpieler = $Animation/AnimationPlayer
+@onready var sichtfeld = $Sichtfeld
+
+var richtung = 0
+
+func _ready() -> void:
+	animationsSpieler.play(\"idle\")
+	pass
+
+func _physics_process(delta: float) -> void:
+	setzeLaufrichtung()
+	velocity.x = GESCHWINDIGKEIT * richtung
+	velocity.y += GRAVITATION * delta
+	move_and_slide()
+	
+
+func spieleVerletzt():
+	animationsSpieler.play(\"verletzt\")
+	
+func setzeLaufrichtung():
+	for charakter in sichtfeld.get_overlapping_bodies():
+		if is_instance_of(charakter, CharacterBody2D):
+			if abs(charakter.position.x - position.x) > 80:
+				richtung = sign(charakter.position.x - position.x)
+			else:
+				richtung = 0	
+"
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7iely"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_mxg2v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_476p2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_4p1gy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bgnij")
+}],
+"loop": false,
+"name": &"angriff",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_er2hv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_xf15q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_y2ft6")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_tklf3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_yx3ox")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_00plc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_hq15g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_okdxo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_p70i7")
+}],
+"loop": true,
+"name": &"laufen",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_gmemr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_0uuep")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_d2qen")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_gvbx0")
+}],
+"loop": false,
+"name": &"tod",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_ijer7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_y7ppf")
+}],
+"loop": false,
+"name": &"verletzt",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_07bbr"]
+resource_name = "idle"
+length = 0.45
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"idle"]
+}
+
+[sub_resource type="Animation" id="Animation_jc2p6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"verletzt"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_42scg"]
+resource_name = "verletzt"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"verletzt"]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_aeqix"]
+_data = {
+"RESET": SubResource("Animation_jc2p6"),
+"idle": SubResource("Animation_07bbr"),
+"verletzt": SubResource("Animation_42scg")
+}
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8wbme"]
+radius = 21.0
+height = 82.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2dskc"]
+radius = 337.12
+
+[node name="SchwarzerRitter" type="CharacterBody2D"]
+script = SubResource("GDScript_u16bh")
+
+[node name="Animation" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Animation"]
+sprite_frames = SubResource("SpriteFrames_7iely")
+animation = &"verletzt"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Animation"]
+libraries = {
+"": SubResource("AnimationLibrary_aeqix")
+}
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_8wbme")
+
+[node name="HitboxAxt" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxAxt"]
+
+[node name="Sichtfeld" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sichtfeld"]
+shape = SubResource("CircleShape2D_2dskc")
