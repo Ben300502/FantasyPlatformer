@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://kb5fff4o6ws2"]
+[gd_scene load_steps=32 format=3 uid="uid://kb5fff4o6ws2"]
 
 [ext_resource type="Texture2D" uid="uid://bhqoo1psj61dm" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight10_attack1.png" id="1_mxg2v"]
 [ext_resource type="Texture2D" uid="uid://dseuqymp0kdcc" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight11_attack2.png" id="2_476p2"]
@@ -24,27 +24,45 @@
 script/source = "extends CharacterBody2D
 
 const GESCHWINDIGKEIT = 120
-const SPRUNGKRAFT = 500
 const GRAVITATION = 1000
 
 @onready var animationsSpieler = $Animation/AnimationPlayer
+@onready var animation = $Animation
+@onready var hitboxAxt = $HitboxAxt
 @onready var sichtfeld = $Sichtfeld
 
 var richtung = 0
 
 func _ready() -> void:
 	animationsSpieler.play(\"idle\")
-	pass
 
 func _physics_process(delta: float) -> void:
-	setzeLaufrichtung()
-	velocity.x = GESCHWINDIGKEIT * richtung
 	velocity.y += GRAVITATION * delta
-	move_and_slide()
 	
+	if animationsSpieler.current_animation == \"angriff\":
+		velocity.x = 0
+	else:
+		setzeLaufrichtung()
+		velocity.x = GESCHWINDIGKEIT * richtung
+		setzeLaufanimation()
+	
+	move_and_slide()
+			
 
 func spieleVerletzt():
 	animationsSpieler.play(\"verletzt\")
+	
+func setzeLaufanimation():
+	if velocity.x > 0:
+		animation.scale.x = 1
+		hitboxAxt.scale.x = 1
+		animationsSpieler.play(\"laufen\")
+	elif velocity.x < 0:
+		animation.scale.x = -1
+		hitboxAxt.scale.x = -1
+		animationsSpieler.play(\"laufen\")
+	elif animationsSpieler.current_animation != \"verletzt\":
+		animationsSpieler.play(\"idle\") 
 	
 func setzeLaufrichtung():
 	for charakter in sichtfeld.get_overlapping_bodies():
@@ -140,6 +158,85 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Animation" id="Animation_jc2p6"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"verletzt"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../HitboxAxt/CollisionShape2D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_dhweb"]
+resource_name = "angriff"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"angriff"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../HitboxAxt/CollisionShape2D:disabled")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.45, 0.46),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [true, false, false, true]
+}
+
 [sub_resource type="Animation" id="Animation_07bbr"]
 resource_name = "idle"
 length = 0.45
@@ -169,8 +266,10 @@ tracks/1/keys = {
 "values": [&"idle"]
 }
 
-[sub_resource type="Animation" id="Animation_jc2p6"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_ufguc"]
+resource_name = "laufen"
+length = 0.9
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -181,7 +280,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [&"verletzt"]
+"values": [&"laufen"]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -190,15 +289,42 @@ tracks/1/path = NodePath("AnimatedSprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.6, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_vc7bc"]
+resource_name = "tod"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [0]
+"values": [&"tod"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
 }
 
 [sub_resource type="Animation" id="Animation_42scg"]
 resource_name = "verletzt"
-length = 0.3
+length = 0.45
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -206,10 +332,10 @@ tracks/0/path = NodePath("AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.15, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [0, 1]
+"values": [0, 1, 0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -227,13 +353,19 @@ tracks/1/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_aeqix"]
 _data = {
 "RESET": SubResource("Animation_jc2p6"),
+"angriff": SubResource("Animation_dhweb"),
 "idle": SubResource("Animation_07bbr"),
+"laufen": SubResource("Animation_ufguc"),
+"tod": SubResource("Animation_vc7bc"),
 "verletzt": SubResource("Animation_42scg")
 }
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8wbme"]
 radius = 21.0
 height = 82.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j6o4a"]
+size = Vector2(69, 82)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_2dskc"]
 radius = 337.12
@@ -258,8 +390,13 @@ shape = SubResource("CapsuleShape2D_8wbme")
 [node name="HitboxAxt" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxAxt"]
+position = Vector2(45.5, 0)
+shape = SubResource("RectangleShape2D_j6o4a")
 
 [node name="Sichtfeld" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sichtfeld"]
 shape = SubResource("CircleShape2D_2dskc")
+
+[connection signal="animation_finished" from="Animation/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

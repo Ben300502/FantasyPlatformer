@@ -622,7 +622,7 @@ tracks/2/path = NodePath("HitboxSchwert/CollisionShape2D:disabled")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.45, 0.6),
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.31),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [true, false, false, true]
