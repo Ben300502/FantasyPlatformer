@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://kb5fff4o6ws2"]
+[gd_scene load_steps=33 format=3 uid="uid://kb5fff4o6ws2"]
 
 [ext_resource type="Texture2D" uid="uid://bhqoo1psj61dm" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight10_attack1.png" id="1_mxg2v"]
 [ext_resource type="Texture2D" uid="uid://dseuqymp0kdcc" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight11_attack2.png" id="2_476p2"]
@@ -21,56 +21,34 @@
 [ext_resource type="Texture2D" uid="uid://xwj7p87cuep5" path="res://Assets/2d-pixel-art-evil-monster-sprites/PNG/Big_knight/big_knight15_hurt2.png" id="19_y7ppf"]
 
 [sub_resource type="GDScript" id="GDScript_u16bh"]
-script/source = "extends CharacterBody2D
+script/source = "extends Gegner
 
-const GESCHWINDIGKEIT = 120
-const GRAVITATION = 1000
-
-@onready var animationsSpieler = $Animation/AnimationPlayer
-@onready var animation = $Animation
-@onready var hitboxAxt = $HitboxAxt
-@onready var sichtfeld = $Sichtfeld
-
-var richtung = 0
+class_name SchwarzerRitter
 
 func _ready() -> void:
-	animationsSpieler.play(\"idle\")
+	animationsSpieler = $Animation/AnimationPlayer
+	animation = $Animation
+	hitbox = $Hitbox
+	hitboxAngriff = $HitboxAxt
+	angriffsSichtfeld = $AngriffsSichtfeld
+	sichtfeld = $Sichtfeld
+	collisionShapeHitboxAngriff = $HitboxAxt/CollisionShape2D
+	collisionShapeAngriffSichtfeld = $AngriffsSichtfeld/CollisionShape2D
+	collisionShapeSichtfeld = $Sichtfeld/CollisionShape2D
+	raycastSichtfeld = $Sichtfeld/RayCast2D
+	bodenUeberprueferLinks = $BodenUeberpruefer/BodenUeberprueferLinks
+	bodenUeberprueferRechts = $BodenUeberpruefer/BodenUeberprueferRechts
+	timer = $Timer
+	
+	GESCHWINDIGKEIT = 100
+	ANGRIFFSREICHWEITE = 80
+	REAKTIONSZEIT = 0.3
+	leben = 2
+	
+	super._ready()  # Ruft die Methode der Elternklasse auf
 
 func _physics_process(delta: float) -> void:
-	velocity.y += GRAVITATION * delta
-	
-	if animationsSpieler.current_animation == \"angriff\":
-		velocity.x = 0
-	else:
-		setzeLaufrichtung()
-		velocity.x = GESCHWINDIGKEIT * richtung
-		setzeLaufanimation()
-	
-	move_and_slide()
-			
-
-func spieleVerletzt():
-	animationsSpieler.play(\"verletzt\")
-	
-func setzeLaufanimation():
-	if velocity.x > 0:
-		animation.scale.x = 1
-		hitboxAxt.scale.x = 1
-		animationsSpieler.play(\"laufen\")
-	elif velocity.x < 0:
-		animation.scale.x = -1
-		hitboxAxt.scale.x = -1
-		animationsSpieler.play(\"laufen\")
-	elif animationsSpieler.current_animation != \"verletzt\":
-		animationsSpieler.play(\"idle\") 
-	
-func setzeLaufrichtung():
-	for charakter in sichtfeld.get_overlapping_bodies():
-		if is_instance_of(charakter, CharacterBody2D):
-			if abs(charakter.position.x - position.x) > 80:
-				richtung = sign(charakter.position.x - position.x)
-			else:
-				richtung = 0	
+	super._physics_process(delta)  # Ruft die Methode der Elternklasse aufder Elternklasse auf
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_7iely"]
@@ -365,10 +343,13 @@ radius = 21.0
 height = 82.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j6o4a"]
-size = Vector2(69, 82)
+size = Vector2(61, 72)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_2dskc"]
-radius = 337.12
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_egq27"]
+size = Vector2(57, 80)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4u6qi"]
+radius = 287.52
 
 [node name="SchwarzerRitter" type="CharacterBody2D"]
 script = SubResource("GDScript_u16bh")
@@ -390,13 +371,34 @@ shape = SubResource("CapsuleShape2D_8wbme")
 [node name="HitboxAxt" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxAxt"]
-position = Vector2(45.5, 0)
+position = Vector2(41.5, 2)
 shape = SubResource("RectangleShape2D_j6o4a")
 
+[node name="AngriffsSichtfeld" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AngriffsSichtfeld"]
+position = Vector2(32.5, 2)
+shape = SubResource("RectangleShape2D_egq27")
+
 [node name="Sichtfeld" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sichtfeld"]
-shape = SubResource("CircleShape2D_2dskc")
+shape = SubResource("CircleShape2D_4u6qi")
+
+[node name="RayCast2D" type="RayCast2D" parent="Sichtfeld"]
+
+[node name="BodenUeberpruefer" type="Node2D" parent="."]
+
+[node name="BodenUeberprueferLinks" type="RayCast2D" parent="BodenUeberpruefer"]
+position = Vector2(25, 35)
+target_position = Vector2(0, 15)
+
+[node name="BodenUeberprueferRechts" type="RayCast2D" parent="BodenUeberpruefer"]
+position = Vector2(-25, 35)
+target_position = Vector2(0, 15)
+
+[node name="Timer" type="Timer" parent="."]
 
 [connection signal="animation_finished" from="Animation/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="body_entered" from="HitboxAxt" to="." method="_on_hitbox_angriff_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

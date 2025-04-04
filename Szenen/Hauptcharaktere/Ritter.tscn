@@ -75,116 +75,27 @@
 [ext_resource type="Texture2D" uid="uid://dodh8443t73n2" path="res://Assets/pixel-art-fantasy-game-main-heroes/PNG/Knight/256x256 Fixed/Hurt/hurt4.png" id="73_jrole"]
 
 [sub_resource type="GDScript" id="GDScript_a2mel"]
-script/source = "extends CharacterBody2D
+script/source = "extends Held
 
-const GESCHWINDIGKEIT = 120
-const SPRUNGKRAFT = 500
-const GRAVITATION = 1000
-
-@onready var animationsSpieler = $Animation/AnimationPlayer
-@onready var animation = $Animation
-@onready var hitboxSchwert = $HitboxSchwert
-
-var schnellerSprung = false
-var angriffGeschwindigkeit = 0
+class_name Ritter
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$HitboxSchwert/CollisionShape2D.disabled = true
-	pass
+	animationsSpieler = $Animation/AnimationPlayer
+	animation = $Animation
+	hitboxAngriff = $HitboxSchwert
+	collisionShapeHitboxAngriff = $HitboxSchwert/CollisionShape2D
+	hitbox = $HitboxRitter
+	
+	GESCHWINDIGKEIT = 140
+	SPRUNGKRAFT = 500
+	leben = 3
+	
+	super._ready()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	velocity.x = 0
-	velocity.y += GRAVITATION * delta
-	
-	if	spieltAngriffsanimation() and is_on_floor():
-		velocity.x = angriffGeschwindigkeit
-	else:
-		$HitboxSchwert/CollisionShape2D.disabled = true
-		ueberpruefeRichtungsEingabe()
-		springenUndLanden()
-		ueberpruefeAngriff()
-	
-	kollisionMitSchwert()
-	
-	
-	move_and_slide()
-	
-	
-func kollisionMitSchwert():
-	for charakter in hitboxSchwert.get_overlapping_bodies():
-		if charakter.has_method(\"spieleVerletzt\"):
-			charakter.spieleVerletzt()
-		
-	
-func spieltAngriffsanimation():
-	return animationsSpieler.current_animation == \"angriff_stand\" or animationsSpieler.current_animation == \"angriff_laufen\" or animationsSpieler.current_animation == \"angriff_rennen\"
-
-func ueberpruefeRichtungsEingabe():
-	if Input.is_action_pressed(\"links\"):
-		animation.scale.x = -1
-		hitboxSchwert.scale.x = -1
-		velocity.x = -GESCHWINDIGKEIT
-	if Input.is_action_pressed(\"rechts\"):
-		animation.scale.x = 1
-		hitboxSchwert.scale.x = 1
-		velocity.x = GESCHWINDIGKEIT
-	if Input.is_action_just_pressed(\"hoch\") and is_on_floor():
-		velocity.y += -SPRUNGKRAFT
-		if Input.is_action_pressed(\"shift\"):
-			schnellerSprung = true
-		else:
-			schnellerSprung = false
-		
-func springenUndLanden():
-	if animationsSpieler.current_animation == \"landen\":
-		pass
-	else:
-		if (animationsSpieler.current_animation == \"fallen\" or animationsSpieler.current_animation == \"doppel_sprung\") and is_on_floor():
-			animationsSpieler.play(\"landen\")
-		elif velocity.x != 0 and is_on_floor():
-			if Input.is_action_pressed(\"shift\"):
-				animationsSpieler.play(\"rennen\")
-				velocity.x *= 2
-			else:
-				animationsSpieler.play(\"laufen\")
-		elif velocity.y >= 0 and not is_on_floor():
-			if schnellerSprung == true:
-				velocity.x *= 1.5
-			if animationsSpieler.current_animation == \"doppel_sprung\" or animationsSpieler.current_animation == \"doppel_sprung_fallen\":
-				animationsSpieler.play(\"doppel_sprung\")
-			else:
-				animationsSpieler.play(\"fallen\")
-		elif velocity.y < 0 and not is_on_floor():
-			if schnellerSprung == true:
-				velocity.x *= 1.5
-			if animationsSpieler.current_animation == \"doppel_sprung\":
-				pass
-			elif Input.is_action_just_pressed(\"hoch\"):
-				velocity.y = -SPRUNGKRAFT
-				animationsSpieler.play(\"doppel_sprung\")
-			else:
-				animationsSpieler.play(\"sprung_hoch\")
-		else:
-			animationsSpieler.play(\"idle\")
-			
-func ueberpruefeAngriff():
-	if(Input.is_action_just_pressed(\"angriff\") and is_on_floor()):
-		if velocity.x != 0:
-			if Input.is_action_pressed(\"shift\"):
-				animationsSpieler.play(\"angriff_rennen\")
-			else:
-				animationsSpieler.play(\"angriff_laufen\")
-		else :
-			animationsSpieler.play(\"angriff_stand\")
-		
-		angriffGeschwindigkeit = velocity.x
-		
-		
-		
-		
-		
+	super._process(delta)
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_bvpv4"]
@@ -282,6 +193,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("10_cfepb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_m361l")
 }],
 "loop": false,
 "name": &"doppel_sprung",
@@ -510,7 +424,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_k077b"]
 resource_name = "angriff_laufen"
-length = 0.9
+length = 0.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -518,7 +432,7 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.6, 0.75),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5]
@@ -550,7 +464,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_mbtvi"]
 resource_name = "angriff_rennen"
-length = 1.2
+length = 0.8
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -558,7 +472,7 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
@@ -590,7 +504,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_cihty"]
 resource_name = "angriff_stand"
-length = 0.6
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -598,7 +512,7 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3]
@@ -639,10 +553,10 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.7, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [0, 7]
+"values": [0, 7, 8]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -717,7 +631,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_di4mi"]
 resource_name = "idle"
-length = 2.4
+length = 1.2
 loop_mode = 1
 step = 0.2
 tracks/0/type = "value"
@@ -727,7 +641,7 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -776,7 +690,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_2kuuj"]
 resource_name = "laufen"
-length = 0.9
+length = 0.6
 loop_mode = 1
 step = 0.0
 tracks/0/type = "value"
@@ -786,7 +700,7 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.6, 0.75),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5]
@@ -806,7 +720,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_wkmnx"]
 resource_name = "rennen"
-length = 1.2
+length = 0.8
 loop_mode = 1
 step = 0.2
 tracks/0/type = "value"
@@ -816,7 +730,7 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1.05),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
@@ -865,7 +779,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_gapkf"]
 resource_name = "tod"
-length = 1.5
+length = 0.9
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -873,7 +787,7 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 1.35),
+"times": PackedFloat32Array(0, 0.8),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0, 9]
@@ -893,7 +807,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_5yfvb"]
 resource_name = "verletzt"
-length = 0.6
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -901,7 +815,7 @@ tracks/0/path = NodePath("Animation/AnimatedSprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.45),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [0, 1, 2, 3]
@@ -970,3 +884,6 @@ shape = SubResource("CapsuleShape2D_nk01h")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxSchwert"]
 position = Vector2(39.5, -0.5)
 shape = SubResource("RectangleShape2D_rxe5i")
+
+[connection signal="animation_finished" from="Animation/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="body_entered" from="HitboxSchwert" to="." method="_on_hitbox_angriff_body_entered"]

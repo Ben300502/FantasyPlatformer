@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bw2h278boex5c"]
+[gd_scene load_steps=6 format=4 uid="uid://bw2h278boex5c"]
 
 [ext_resource type="Texture2D" uid="uid://dwttkr2laak8x" path="res://Assets/castle-platformer-pixel-art-tileset/VordergrundTiles.png" id="1_43fdi"]
 [ext_resource type="PackedScene" uid="uid://jfuj3o0pqx7r" path="res://Szenen/Hauptcharaktere/Ritter.tscn" id="1_ti5gq"]
@@ -43,7 +43,7 @@ texture_region_size = Vector2i(64, 64)
 1:1/0 = 0
 2:1/0 = 0
 3:1/0 = 0
-3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -17.5893, 32, -18.1196, 32, 16.8822, -32, 16.8822)
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -17.5893, 32, -18.1196, 32, -5.5, -32, -6)
 4:1/0 = 0
 5:1/0 = 0
 6:1/0 = 0
@@ -52,6 +52,7 @@ texture_region_size = Vector2i(64, 64)
 9:1/0 = 0
 10:1/0 = 0
 11:1/0 = 0
+11:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-23.4229, -17.3241, 24.6604, -17.3241, 24.6603, -5.3033, -23.5997, -4.94975)
 12:1/0 = 0
 13:1/0 = 0
 14:1/0 = 0
@@ -130,16 +131,24 @@ texture_region_size = Vector2i(64, 64)
 31:3/0 = 0
 0:4/0 = 0
 1:4/0 = 0
+1:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -17.3241, -15.2912, -17.3241, -14.9376, -5.3033, -32, -5.5)
 2:4/0 = 0
+2:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(15.8215, -17.3241, 32, -17.3241, 32, -5.125, 15.9375, -5.125)
 3:4/0 = 0
 4:4/0 = 0
+4:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -17.1473, -15.2912, -17.3241, -15.468, -5.83363, -32, -5.65685)
+4:4/0/physics_layer_0/polygon_1/points = PackedVector2Array(16.3518, -16.9706, 32, -16.9706, 32, -5.48008, 16.7054, -5.3033)
 5:4/0 = 0
 6:4/0 = 0
 7:4/0 = 0
+7:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -17.5009, -14.875, -17.5, -15.1144, -5.65685, -32, -5.3033)
 8:4/0 = 0
 9:4/0 = 0
+9:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(15.9983, -17.5009, 32, -17.5009, 32, -5.12652, 15.9983, -5.65685)
 10:4/0 = 0
 11:4/0 = 0
+11:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -17.3241, -15.468, -17.5009, -14.9376, -5.3033, -32, -5.48008)
+11:4/0/physics_layer_0/polygon_1/points = PackedVector2Array(16.3125, -17.25, 32, -17.5009, 32, -4.94975, 16.1751, -5.3033)
 12:4/0 = 0
 13:4/0 = 0
 14:4/0 = 0
@@ -170,10 +179,16 @@ texture_region_size = Vector2i(64, 64)
 19:5/0 = 0
 0:6/0 = 0
 1:6/0 = 0
+1:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -17.625, -15.3125, -17.5, -15.3125, -6.25, -32, -6.25)
+1:6/0/physics_layer_0/polygon_1/points = PackedVector2Array(16.1875, -17.25, 32, -17.5, 32, -5.125, 15.8125, -5.25)
 2:6/0 = 0
+2:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -17.25, -15.0625, -17.375, -15.1875, -5.25, -32, -5.125)
+2:6/0/physics_layer_0/polygon_1/points = PackedVector2Array(15.9805, -17.4839, 32, -17.5952, 32, -5.12267, 15.9805, -5.23403)
 3:6/0 = 0
 4:6/0 = 0
+4:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -17.5606, -15.2291, -17.3622, -15.1299, -4.86142, -32, -5.05984)
 5:6/0 = 0
+5:6/0/physics_layer_0/polygon_0/points = PackedVector2Array(16.0228, -17.5606, 32, -17.6598, 32, -5.05984, 16.0228, -5.05984)
 6:6/0 = 0
 7:6/0 = 0
 8:6/0 = 0
@@ -548,14 +563,17 @@ sources/0 = SubResource("TileSetAtlasSource_d51xv")
 
 [node name="Probelevel" type="Node2D"]
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="Vordergrund" type="TileMapLayer" parent="."]
+use_parent_material = true
+tile_map_data = PackedByteArray("AAABAAUAAAAAAAAAAAABAAYAAAAAAAEAAAACAAYAAAABAAEAAAADAAYAAAABAAEAAAAEAAYAAAABAAEAAAAFAAYAAAABAAEAAAAGAAYAAAABAAEAAAAHAAYAAAABAAEAAAAIAAYAAAABAAEAAAABAAcAAAAAAAEAAAACAAcAAAABAAEAAAADAAcAAAABAAEAAAABAAgAAAAAAAEAAAACAAgAAAABAAEAAAADAAgAAAABAAEAAAAEAAgAAAABAAEAAAAFAAgAAAABAAEAAAAGAAgAAAABAAEAAAAHAAgAAAABAAEAAAAIAAgAAAABAAEAAAAEAAcAAAABAAEAAAAFAAcAAAABAAEAAAAGAAcAAAABAAEAAAAHAAcAAAABAAEAAAAIAAcAAAABAAEAAAACAAUAAAABAAAAAAADAAUAAAABAAAAAAAEAAUAAAABAAAAAAAFAAUAAAABAAAAAAAGAAUAAAABAAAAAAAHAAUAAAABAAAAAAAIAAUAAAABAAAAAAAJAAUAAAACAAAAAAAJAAYAAAACAAEAAAAJAAcAAAACAAEAAAAJAAgAAAACAAEAAAAKAAQAAAAAAAAAAAAKAAUAAAAAAAIAAAANAAIAAAAJAAEAAAANAAEAAAAJAAAAAAALAAMAAAAEAAAAAAAPAAIAAAAJAAAAAAAPAAQAAAAJAAIAAAAOAAQAAAACAAAAAAANAAUAAAABAAIAAAANAAQAAAABAAAAAAAOAAMAAAAGAAIAAAAPAAMAAAALAAQAAAAQAAMAAAAHAAIAAAAOAAUAAAACAAIAAAALAAUAAAACAAIAAAALAAQAAAACAAYAAAANAAMAAAAFAAIAAAAMAAIAAAAJAAAAAAAMAAMAAAALAAQAAAAMAAQAAAABAAYAAAAMAAUAAAAAAAIAAAAEAAIAAAAGAAAAAAAFAAIAAAADAAEAAAAGAAIAAAADAAEAAAAHAAIAAAAHAAAAAAAJAAMAAAALAAEAAAAAAAIAAAABAAAAAAA=")
 tile_set = SubResource("TileSet_vuiu2")
 rendering_quadrant_size = 64
-format = 2
-layer_0/tile_data = PackedInt32Array(327681, 0, 0, 393217, 0, 1, 393218, 65536, 1, 393219, 65536, 1, 393220, 65536, 1, 393221, 65536, 1, 393222, 65536, 1, 393223, 65536, 1, 393224, 65536, 1, 458753, 0, 1, 458754, 65536, 1, 458755, 65536, 1, 524289, 0, 1, 524290, 65536, 1, 524291, 65536, 1, 524292, 65536, 1, 524293, 65536, 1, 524294, 65536, 1, 524295, 65536, 1, 524296, 65536, 1, 458756, 65536, 1, 458757, 65536, 1, 458758, 65536, 1, 458759, 65536, 1, 458760, 65536, 1, 327682, 65536, 0, 327683, 65536, 0, 327684, 65536, 0, 327685, 65536, 0, 327686, 65536, 0, 327687, 65536, 0, 327688, 65536, 0, 327689, 131072, 0, 393225, 131072, 1, 458761, 131072, 1, 524297, 131072, 1, 262154, 0, 0, 327690, 0, 2, 131085, 589824, 1, 65549, 589824, 0, 196619, 262144, 0, 131087, 589824, 0, 262159, 589824, 2, 262158, 131072, 0, 327693, 65536, 2, 262157, 65536, 0, 196622, 393216, 2, 196623, 720896, 4, 196624, 458752, 2, 327694, 131072, 2, 327691, 131072, 2, 262155, 131072, 6, 196621, 327680, 2, 131084, 589824, 0, 196620, 720896, 4, 262156, 65536, 6, 327692, 0, 2)
-
-[node name="Ritter" parent="." instance=ExtResource("1_ti5gq")]
-position = Vector2(397, 248)
 
 [node name="SchwarzerRitter" parent="." instance=ExtResource("3_7rrhm")]
-position = Vector2(214, 151)
+position = Vector2(329, 95)
+
+[node name="SchwarzerRitter2" parent="." instance=ExtResource("3_7rrhm")]
+position = Vector2(179, 273)
+
+[node name="Ritter" parent="." instance=ExtResource("1_ti5gq")]
+position = Vector2(744, 173)
